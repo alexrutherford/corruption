@@ -5,7 +5,7 @@
 # 'Corruption Drives the Emergence of Civil Society'
 # Abdulah et al http://arxiv.org/abs/1307.6646
 # A. Rutherford 2013
-###################
+####################
 
 import numpy as np
 import matplotlib.pyplot as plt
