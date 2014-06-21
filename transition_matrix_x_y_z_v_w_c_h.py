@@ -1,11 +1,5 @@
-####################
-# Code to calculate and plotstationary 
-# distributions in public goods games with punishment
-# imitation and mutation as described in
-# 'Corruption Drives the Emergence of Civil Society'
-# Abdulah et al http://arxiv.org/abs/1307.6646
-# A. Rutherford 2013
-####################
+'''Code to calculate and plotstationary  distributions in public goods games with punishment, imitation and mutation as described in 'Corruption Drives the Emergence of Civil Society' Abdulah et al (2013) Journal of the Royal Society Interface available at http://arxiv.org/abs/1307.6646
+'''
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -51,9 +45,10 @@ strategies=['v','w','x','y','z','c','h']
 #################
 def p_h(V,W,X,Y,Z,C,H):
 #################
-	if not V+W+X+Y+Z+C+H==M:
-		print 'Ph: DONT SUM TO M!!!!'
-		sys.exit(1)
+'''Takes (int) number of each strategy in population,
+and global parameters and returns hybrid strategy payoff (float)'''
+
+	assert V+W+X+Y+Z+C+H==M, 'Ph: DONT SUM TO M!!!!'
 
 	returnVal=0.0
 
@@ -79,11 +74,12 @@ def p_h(V,W,X,Y,Z,C,H):
 #################
 def p_v(V,W,X,Y,Z,C,H):
 #################
-	if not V+W+X+Y+Z+C+H==M:
-		print 'Pv: DONT SUM TO M!!!!'
-		sys.exit(1)
+'''Takes (int) number of each strategy in population,
+and global parameters and returns pool=punisher strategy payoff (float)'''
 
-	returnVal=0.0
+	assert V+W+X+Y+Z+C+H==M, 'Pv: DONT SUM TO M!!!!'
+	
+  returnVal=0.0
 
 	returnVal+=r*((M-Z-Y-C)/float(M-Z))-1
 	returnVal*=c
@@ -98,9 +94,10 @@ def p_v(V,W,X,Y,Z,C,H):
 #################
 def p_w(V,W,X,Y,Z,C,H):
 #################
-	if not V+W+X+Y+Z+C+H==M:
-		print 'Pw: DONT SUM TO M!!!!'
-		sys.exit(1)
+'''Takes (int) number of each strategy in population,
+and global parameters and returns peer-punisher strategy payoff (float)'''
+
+	assert V+W+X+Y+Z+C+H==M, 'Pw: DONT SUM TO M!!!!'
 
 	returnVal=0.0
 
@@ -126,11 +123,12 @@ def p_w(V,W,X,Y,Z,C,H):
 #################
 def p_x(V,W,X,Y,Z,C,H):
 #################
-	if not V+W+X+Y+Z+C+H==M:
-		print 'Px: DONT SUM TO M!!!!'
-		sys.exit(1)
+'''Takes (int) number of each strategy in population,
+and global parameters and returns cooperator strategy payoff (float)'''
 
-	returnVal=0.0
+	assert V+W+X+Y+Z+C+H==M, 'Px: DONT SUM TO M!!!!'
+	
+  returnVal=0.0
 
 	returnVal+=r*((M-Z-Y-C)/float(M-Z))-1
 	returnVal*=c*(1.-((scipy.special.binom(Z,N-1))/(scipy.special.binom(M-1,N-1))))
@@ -151,10 +149,10 @@ def p_x(V,W,X,Y,Z,C,H):
 #################
 def p_c(V,W,X,Y,Z,C,H):
 #################
+'''Takes (int) number of each strategy in population,
+and global parameters and returns corruptor strategy payoff (float)'''
 
-	if not V+W+X+Y+Z+C+H==M:
-		print 'Px: DONT SUM TO M!!!!'
-		sys.exit(1)
+	assert V+W+X+Y+Z+C+H==M, 'Pc: DONT SUM TO M!!!!'
 
 	returnVal=0.0
 
@@ -172,9 +170,10 @@ def p_c(V,W,X,Y,Z,C,H):
 #################
 def p_y(V,W,X,Y,Z,C,H):
 #################
-	if not V+W+X+Y+Z+C+H==M:
-		print 'Px: DONT SUM TO M!!!!'
-		sys.exit(1)
+'''Takes (int) number of each strategy in population,
+and global parameters and returns defector strategy payoff (float)'''
+
+	assert V+W+X+Y+Z+C+H==M, 'Py: DONT SUM TO M!!!!'
 
 	returnVal=0.0
 
@@ -195,12 +194,16 @@ def p_y(V,W,X,Y,Z,C,H):
 #################
 def p_z(V,W,X,Y,Z,C,H):
 #################
+'''Takes (int) number of each strategy in population,
+and global parameters and returns (constant) non-participant strategy payoff (float)'''
+
 	return sigma
 
 #################
 def getNumbers(arg0,arg1,n):
 #################
-
+'''For a given pair of strategies (strings) returns full 
+tuple describing number of each strategy (int)'''
 	vv=ww=xx=yy=zz=cc=hh=0
 
 	if arg0=='x':xx=M-n
@@ -224,12 +227,11 @@ def getNumbers(arg0,arg1,n):
 #################
 def rho(*args):
 #################
-# Pass strategy names as args
-	global payoffDict
+'''Calculates fixation probability of one strategy into another.
+Strategies passed as strings, fixation probability returned as float'''	
+  global payoffDict
 
-	if not len(args)==2:
-		print 'NEED 2 ARGS!!!!'
-		sys.exit(1)
+	assert len(args)==2,'NEED 2 ARGS!!!!'
 
 	strat0=payoffDict[args[0]]
 	strat1=payoffDict[args[1]]
@@ -253,6 +255,8 @@ def rho(*args):
 #################
 def getTransitionMatrix(strategies):
 #################
+'''Populates a transition matrix between homogeneous states of each strategy.
+Returns (n,n) NumPy matrix for n different strategies'''
 	d=len(strategies)
 
 	matrix=np.zeros(shape=(d,d))
@@ -268,7 +272,8 @@ def getTransitionMatrix(strategies):
 #################
 def getStatDist(mat):
 #################
-# Get stationary dist by power method
+'''Calculates stationary distribution of strategies as dominant eigenvector
+of transition matrix using Power Iteration method. Returns NumPy array length n'''
 
 	tempDist=np.array([0,0,0,1,0,0,0])
 	for i in xrange(100000):
