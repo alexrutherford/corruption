@@ -1,4 +1,7 @@
-'''Code to calculate and plotstationary  distributions in public goods games with punishment, imitation and mutation as described in 'Corruption Drives the Emergence of Civil Society' Abdulah et al (2013) Journal of the Royal Society Interface available at http://arxiv.org/abs/1307.6646
+'''Code to calculate and plotstationary  distributions in public goods games with punishment, 
+imitation and mutation as described in 'Corruption Drives the Emergence of Civil Society' 
+Abdulah et al (2013) Journal of the Royal Society Interface available at 
+http://arxiv.org/abs/1307.6646
 '''
 
 import numpy as np
